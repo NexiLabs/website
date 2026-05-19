@@ -1,50 +1,43 @@
 import { useState } from "react";
+import { supabase } from "./supabase";
 
 const products = [
-  {
-    name: "ForgeOS",
-    tag: "Community Operating System",
-    status: "First MVP",
-    desc: "Launch and manage online communities with roles, applications, events, announcements, profiles, and moderation tools.",
-  },
-  {
-    name: "PulseDesk",
-    tag: "Support & Safety Hub",
-    status: "Planned",
-    desc: "Handle tickets, reports, appeals, incidents, and support requests from one clean dashboard.",
-  },
-  {
-    name: "LumaBuild",
-    tag: "Website & Brand Builder",
-    status: "Planned",
-    desc: "Create modern websites for creators, communities, students, startups, and small teams.",
-  },
-  {
-    name: "OrbitChat",
-    tag: "Communication Platform",
-    status: "Concept",
-    desc: "A lightweight messaging platform for groups, creators, clubs, teams, and communities.",
-  },
-  {
-    name: "ArcadeCloud",
-    tag: "Social Gaming Network",
-    status: "Concept",
-    desc: "Create rooms, mini-games, profiles, cosmetics, and social gaming experiences.",
-  },
-  {
-    name: "NovaLearn",
-    tag: "Learning Platform",
-    status: "Concept",
-    desc: "Free learning for coding, business, design, online safety, and digital skills.",
-  },
+  { name: "ForgeOS", tag: "Community Operating System", status: "First MVP", desc: "Launch and manage online communities with roles, applications, events, announcements, profiles, and moderation tools." },
+  { name: "PulseDesk", tag: "Support & Safety Hub", status: "Planned", desc: "Handle tickets, reports, appeals, incidents, and support requests from one clean dashboard." },
+  { name: "LumaBuild", tag: "Website & Brand Builder", status: "Planned", desc: "Create modern websites for creators, communities, students, startups, and small teams." },
+  { name: "OrbitChat", tag: "Communication Platform", status: "Concept", desc: "A lightweight messaging platform for groups, creators, clubs, teams, and communities." },
+  { name: "ArcadeCloud", tag: "Social Gaming Network", status: "Concept", desc: "Create rooms, mini-games, profiles, cosmetics, and social gaming experiences." },
+  { name: "NovaLearn", tag: "Learning Platform", status: "Concept", desc: "Free learning for coding, business, design, online safety, and digital skills." },
 ];
 
 export default function App() {
-  const [joined, setJoined] = useState(false);
+  const [form, setForm] = useState({ name: "", email: "", product: "" });
+  const [status, setStatus] = useState("");
 
-  function handleWaitlist(e) {
+  function updateForm(e) {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
+  async function handleWaitlist(e) {
     e.preventDefault();
-    setJoined(true);
+    setStatus("Submitting...");
+
+    const { error } = await supabase.from("waitlist").insert([
+      {
+        name: form.name,
+        email: form.email,
+        product: form.product,
+      },
+    ]);
+
+    if (error) {
+      console.error(error);
+      setStatus("Something went wrong. Please try again.");
+      return;
+    }
+
+    setStatus("You joined the Nexi Labs launch list.");
+    setForm({ name: "", email: "", product: "" });
   }
 
   return (
@@ -66,12 +59,7 @@ export default function App() {
         <div className="orb orbTwo"></div>
 
         <p className="eyebrow">Free-first technology company</p>
-
-        <h1>
-          Build better tools.
-          <br />
-          Make them free first.
-        </h1>
+        <h1>Build better tools.<br />Make them free first.</h1>
 
         <p className="heroText">
           Nexi Labs builds original products for communities, creators,
@@ -85,18 +73,9 @@ export default function App() {
       </section>
 
       <section className="stats">
-        <div>
-          <strong>6</strong>
-          <span>Original products</span>
-        </div>
-        <div>
-          <strong>£0</strong>
-          <span>Launch pricing</span>
-        </div>
-        <div>
-          <strong>2026</strong>
-          <span>Build phase</span>
-        </div>
+        <div><strong>6</strong><span>Original products</span></div>
+        <div><strong>£0</strong><span>Launch pricing</span></div>
+        <div><strong>2026</strong><span>Build phase</span></div>
       </section>
 
       <section id="products" className="section">
@@ -167,27 +146,43 @@ export default function App() {
         <p>Be first to test Nexi Labs products when early versions go live.</p>
 
         <form onSubmit={handleWaitlist}>
-          <input type="text" placeholder="Your name" required />
-          <input type="email" placeholder="Your email" required />
+          <input
+            name="name"
+            type="text"
+            placeholder="Your name"
+            value={form.name}
+            onChange={updateForm}
+            required
+          />
 
-          <select required defaultValue="">
+          <input
+            name="email"
+            type="email"
+            placeholder="Your email"
+            value={form.email}
+            onChange={updateForm}
+            required
+          />
+
+          <select
+            name="product"
+            value={form.product}
+            onChange={updateForm}
+            required
+          >
             <option value="" disabled>Product I care about most</option>
-            <option>ForgeOS</option>
-            <option>PulseDesk</option>
-            <option>LumaBuild</option>
-            <option>OrbitChat</option>
-            <option>ArcadeCloud</option>
-            <option>NovaLearn</option>
+            <option value="ForgeOS">ForgeOS</option>
+            <option value="PulseDesk">PulseDesk</option>
+            <option value="LumaBuild">LumaBuild</option>
+            <option value="OrbitChat">OrbitChat</option>
+            <option value="ArcadeCloud">ArcadeCloud</option>
+            <option value="NovaLearn">NovaLearn</option>
           </select>
 
           <button type="submit">Join Waitlist</button>
         </form>
 
-        {joined && (
-          <div className="success">
-            You joined the Nexi Labs launch list.
-          </div>
-        )}
+        {status && <div className="success">{status}</div>}
       </section>
 
       <footer id="contact">
