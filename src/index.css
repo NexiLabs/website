@@ -4,9 +4,7 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   font-family: Inter, Arial, sans-serif;
@@ -40,6 +38,7 @@ body {
 .logo {
   font-size: 1.45rem;
   font-weight: 900;
+  text-decoration: none;
   background: linear-gradient(90deg, #34d399, #60a5fa);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -101,13 +100,8 @@ body {
 }
 
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0) scale(1);
-  }
-
-  50% {
-    transform: translateY(-30px) scale(1.08);
-  }
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.08); }
 }
 
 .eyebrow {
@@ -164,7 +158,7 @@ body {
 .primary:hover,
 .secondary:hover,
 .navButton:hover,
-.card button:hover,
+.cardLink:hover,
 .waitlist button:hover {
   transform: translateY(-3px);
 }
@@ -187,9 +181,7 @@ body {
   border-right: 1px solid rgba(255,255,255,0.08);
 }
 
-.stats div:last-child {
-  border-right: none;
-}
+.stats div:last-child { border-right: none; }
 
 .stats strong {
   display: block;
@@ -197,16 +189,14 @@ body {
   color: #34d399;
 }
 
-.stats span {
-  color: #aab4c3;
-}
+.stats span { color: #aab4c3; }
 
 .section {
   padding: 95px 7%;
 }
 
 .sectionHeader {
-  max-width: 850px;
+  max-width: 900px;
   margin-bottom: 42px;
 }
 
@@ -234,31 +224,18 @@ body {
 }
 
 .card {
-  min-height: 305px;
+  min-height: 380px;
   padding: 30px;
   border-radius: 30px;
   background: linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.025));
   border: 1px solid rgba(255,255,255,0.09);
   transition: 0.25s ease;
-  animation: riseIn 0.7s ease both;
 }
 
 .card:hover {
   transform: translateY(-8px);
   border-color: rgba(52, 211, 153, 0.45);
   box-shadow: 0 24px 90px rgba(52, 211, 153, 0.1);
-}
-
-@keyframes riseIn {
-  from {
-    opacity: 0;
-    transform: translateY(22px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .cardTop {
@@ -291,17 +268,35 @@ body {
 .card p {
   color: #aab4c3;
   line-height: 1.75;
+  margin-bottom: 20px;
+}
+
+.featureList {
+  list-style: none;
+  display: grid;
+  gap: 8px;
   margin-bottom: 24px;
 }
 
-.card button {
-  border: none;
+.featureList li {
+  color: #dbeafe;
+  font-size: 0.95rem;
+}
+
+.featureList li::before {
+  content: "✓";
+  color: #34d399;
+  margin-right: 10px;
+}
+
+.cardLink {
+  display: inline-block;
   border-radius: 999px;
   background: rgba(52, 211, 153, 0.14);
   color: #34d399;
   padding: 12px 18px;
   font-weight: 900;
-  cursor: pointer;
+  text-decoration: none;
   transition: 0.25s ease;
 }
 
@@ -363,6 +358,34 @@ body {
   font-size: 1.05rem;
 }
 
+.faqSection {
+  padding-top: 40px;
+}
+
+.faqGrid {
+  display: grid;
+  gap: 16px;
+}
+
+.faqItem {
+  padding: 22px 24px;
+  border-radius: 22px;
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.faqItem summary {
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 1.1rem;
+}
+
+.faqItem p {
+  margin-top: 14px;
+  color: #aab4c3;
+  line-height: 1.8;
+}
+
 .waitlist {
   margin: 40px 7% 90px;
   padding: 70px 40px;
@@ -397,9 +420,7 @@ body {
   outline: none;
 }
 
-.waitlist input::placeholder {
-  color: #94a3b8;
-}
+.waitlist input::placeholder { color: #94a3b8; }
 
 .waitlist button {
   grid-column: span 2;
@@ -424,20 +445,62 @@ body {
   font-weight: 800;
 }
 
-footer {
-  padding: 80px 7%;
-  text-align: center;
+.footer {
+  padding: 70px 7% 32px;
   border-top: 1px solid rgba(255,255,255,0.08);
-  background: rgba(0,0,0,0.28);
+  background: rgba(0,0,0,0.32);
 }
 
-footer p {
+.footerBrand {
+  max-width: 620px;
+  margin-bottom: 42px;
+}
+
+.footerBrand h2 {
+  font-size: 2rem;
+  margin-bottom: 14px;
+}
+
+.footerBrand p {
   color: #aab4c3;
-  margin: 14px 0;
+  line-height: 1.7;
+  margin-bottom: 14px;
 }
 
-footer strong {
+.footerBrand strong {
   color: #34d399;
+}
+
+.footerCols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  gap: 28px;
+  margin-bottom: 42px;
+}
+
+.footerCols h4 {
+  margin-bottom: 14px;
+}
+
+.footerCols a {
+  display: block;
+  color: #aab4c3;
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+
+.footerCols a:hover {
+  color: #34d399;
+}
+
+.footerBottom {
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  color: #94a3b8;
+  font-size: 0.9rem;
 }
 
 @media (max-width: 850px) {
@@ -458,7 +521,8 @@ footer strong {
   }
 
   .stats,
-  .mission {
+  .mission,
+  .footerCols {
     grid-template-columns: 1fr;
   }
 
@@ -467,9 +531,7 @@ footer strong {
     border-bottom: 1px solid rgba(255,255,255,0.08);
   }
 
-  .stats div:last-child {
-    border-bottom: none;
-  }
+  .stats div:last-child { border-bottom: none; }
 
   .mission {
     padding: 34px;
@@ -485,5 +547,9 @@ footer strong {
 
   .waitlist button {
     grid-column: span 1;
+  }
+
+  .footerBottom {
+    flex-direction: column;
   }
 }
