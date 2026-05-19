@@ -665,3 +665,105 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+.logoButton {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1.45rem;
+  font-weight: 900;
+  background: linear-gradient(90deg, #34d399, #60a5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.adminStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin: 24px 0;
+}
+
+.adminStats div {
+  padding: 22px;
+  border-radius: 20px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.adminStats strong {
+  display: block;
+  font-size: 2rem;
+  color: #34d399;
+}
+
+.adminStats span {
+  color: #aab4c3;
+}
+
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 22px 0;
+}
+
+.filterBar button,
+.legalCards button,
+.footerCols button,
+.backButton {
+  padding: 12px 16px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(52, 211, 153, 0.14);
+  color: #34d399;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.legalCards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.legalPage {
+  padding: 90px 7%;
+  max-width: 1000px;
+}
+
+.legalPage h1 {
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  margin-bottom: 20px;
+  letter-spacing: -0.06em;
+}
+
+.legalText {
+  margin-top: 40px;
+  display: grid;
+  gap: 26px;
+}
+
+.legalText h2 {
+  color: #34d399;
+}
+
+.legalText p {
+  color: #aab4c3;
+  line-height: 1.8;
+}
+
+.backButton {
+  margin-bottom: 30px;
+}
+
+.footerCols button {
+  display: block;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 850px) {
+  .adminStats {
+    grid-template-columns: 1fr;
+  }
+}

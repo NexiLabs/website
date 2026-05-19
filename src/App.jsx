@@ -1,74 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "./supabase";
 
 const products = [
-  {
-    slug: "forgeos",
-    name: "ForgeOS",
-    tag: "Community Operating System",
-    status: "First MVP",
-    desc: "A command center for launching and managing online communities, clubs, teams, and creator groups.",
-    details:
-      "ForgeOS is the first flagship Nexi Labs product. It helps people create community spaces, manage members, handle roles, collect applications, post announcements, and run teams from one clean dashboard.",
-    features: ["Community profiles", "Roles & permissions", "Applications", "Announcements", "Member dashboards", "Staff tools"],
-  },
-  {
-    slug: "pulsedesk",
-    name: "PulseDesk",
-    tag: "Support & Safety Hub",
-    status: "Planned",
-    desc: "A clean support desk for handling tickets, reports, appeals, safety cases, and team workflows.",
-    details:
-      "PulseDesk is built for communities and teams that need structured support workflows. It helps handle incidents, appeals, reports, internal notes, and case tracking.",
-    features: ["Ticket inbox", "Case notes", "Priority levels", "Status tracking", "Appeals", "Safety workflows"],
-  },
-  {
-    slug: "lumabuild",
-    name: "LumaBuild",
-    tag: "Website & Brand Builder",
-    status: "Planned",
-    desc: "A simple builder for creating polished landing pages, brand pages, and creator websites quickly.",
-    details:
-      "LumaBuild gives creators, students, communities, and startups a fast way to create modern websites without needing to code everything from scratch.",
-    features: ["Page templates", "Brand kits", "Contact forms", "SEO basics", "Landing pages", "Creator pages"],
-  },
-  {
-    slug: "orbitchat",
-    name: "OrbitChat",
-    tag: "Communication Platform",
-    status: "Concept",
-    desc: "A lightweight communication platform built for groups, creators, student teams, and communities.",
-    details:
-      "OrbitChat is a communication platform concept designed for small communities, groups, clubs, and creators who want focused spaces without unnecessary complexity.",
-    features: ["Spaces", "Channels", "Direct messages", "Moderation tools", "Profiles", "Notifications"],
-  },
-  {
-    slug: "arcadecloud",
-    name: "ArcadeCloud",
-    tag: "Social Gaming Network",
-    status: "Concept",
-    desc: "A social gaming platform where users can create rooms, mini-games, profiles, and creator-led experiences.",
-    details:
-      "ArcadeCloud is the long-term social gaming branch of Nexi Labs, focused on creator-made spaces, mini-games, profile customization, and social play.",
-    features: ["Rooms", "Mini-games", "Profiles", "Creator tools", "Cosmetics", "Events"],
-  },
-  {
-    slug: "novalearn",
-    name: "NovaLearn",
-    tag: "Learning Platform",
-    status: "Concept",
-    desc: "A free learning hub for practical digital skills, coding, business, design, and online safety.",
-    details:
-      "NovaLearn is a practical learning platform for people who want to build real digital skills, including coding, design, business basics, online safety, and product development.",
-    features: ["Skill paths", "Lessons", "Projects", "Progress tracking", "Guides", "Resources"],
-  },
-];
-
-const faqs = [
-  ["Is Nexi Labs free?", "Yes. Nexi Labs is launching as a free-first company. Core products are planned to remain free during early access."],
-  ["What is being built first?", "ForgeOS is the first planned MVP because it gives Nexi Labs a strong foundation for communities and dashboards."],
-  ["Is the website live 24/7?", "Yes. The site runs on Vercel, so it stays online even when your laptop is off."],
-  ["Does the waitlist work?", "Yes. Submissions are saved to Supabase and trigger email notifications through Resend."],
+  "ForgeOS",
+  "PulseDesk",
+  "LumaBuild",
+  "OrbitChat",
+  "ArcadeCloud",
+  "NovaLearn",
 ];
 
 export default function App() {
@@ -79,6 +18,8 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [waitlist, setWaitlist] = useState([]);
   const [adminStatus, setAdminStatus] = useState("");
+  const [filter, setFilter] = useState("All");
+  const [page, setPage] = useState("home");
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
@@ -89,6 +30,18 @@ export default function App() {
 
     return () => listener.subscription.unsubscribe();
   }, []);
+
+  const filteredWaitlist = useMemo(() => {
+    if (filter === "All") return waitlist;
+    return waitlist.filter((entry) => entry.product === filter);
+  }, [waitlist, filter]);
+
+  const productCounts = useMemo(() => {
+    return products.map((product) => ({
+      product,
+      count: waitlist.filter((entry) => entry.product === product).length,
+    }));
+  }, [waitlist]);
 
   function updateForm(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -118,6 +71,7 @@ export default function App() {
 
   async function signUp(e) {
     e.preventDefault();
+
     const { error } = await supabase.auth.signUp({
       email: authEmail,
       password: authPassword,
@@ -129,6 +83,7 @@ export default function App() {
 
   async function signIn(e) {
     e.preventDefault();
+
     const { error } = await supabase.auth.signInWithPassword({
       email: authEmail,
       password: authPassword,
@@ -152,35 +107,38 @@ export default function App() {
 
     if (error) {
       console.error(error);
-      setAdminStatus("You are signed in, but this account is not an admin yet.");
+      setAdminStatus("This account is not an admin yet.");
       return;
     }
 
     setWaitlist(data);
-    setAdminStatus(`Loaded ${data.length} waitlist entries.`);
+    setAdminStatus(`Loaded ${data.length} entries.`);
   }
+
+  if (page === "privacy") return <LegalPage title="Privacy Policy" setPage={setPage} />;
+  if (page === "terms") return <LegalPage title="Terms of Service" setPage={setPage} />;
+  if (page === "aup") return <LegalPage title="Acceptable Use Policy" setPage={setPage} />;
 
   return (
     <main className="site">
       <nav className="nav">
-        <a className="logo" href="#top">Nexi Labs</a>
+        <button className="logoButton" onClick={() => setPage("home")}>Nexi Labs</button>
 
         <div className="navLinks">
           <a href="#products">Products</a>
-          <a href="#infrastructure">Vercel</a>
-          <a href="#auth">Auth</a>
           <a href="#admin">Admin</a>
+          <a href="#legal">Legal</a>
+          <a href="#waitlist">Waitlist</a>
           <a className="navButton" href="#waitlist">Start Free</a>
         </div>
       </nav>
 
-      <section id="top" className="hero">
+      <section className="hero">
         <div className="orb orbOne"></div>
         <div className="orb orbTwo"></div>
 
         <p className="eyebrow">Free-first technology company</p>
         <h1>Build better tools.<br />Make them free first.</h1>
-
         <p className="heroText">
           Nexi Labs creates original software for communities, creators,
           students, startups, gamers, and digital teams.
@@ -188,7 +146,7 @@ export default function App() {
 
         <div className="heroBtns">
           <a className="primary" href="#products">Explore Products</a>
-          <a className="secondary" href="#auth">Sign In</a>
+          <a className="secondary" href="#admin">Admin Dashboard</a>
         </div>
       </section>
 
@@ -201,105 +159,41 @@ export default function App() {
       <section id="products" className="section">
         <div className="sectionHeader">
           <p className="eyebrow">Products</p>
-          <h2>A new software ecosystem from zero.</h2>
-          <p>
-            Nexi Labs is building connected tools for communities, support,
-            websites, communication, learning, and social gaming.
-          </p>
+          <h2>Product ecosystem.</h2>
+          <p>Nexi Labs is building free-first tools for creation, management, support, learning, and online communities.</p>
         </div>
 
         <div className="grid">
           {products.map((product) => (
-            <article className="card" id={`product-${product.slug}`} key={product.name}>
+            <article className="card" key={product}>
               <div className="cardTop">
-                <span>{product.tag}</span>
-                <small>{product.status}</small>
+                <span>Coming Free</span>
+                <small>{product === "ForgeOS" ? "First MVP" : "Planned"}</small>
               </div>
-
-              <h3>{product.name}</h3>
-              <p>{product.desc}</p>
-
-              <ul className="featureList">
-                {product.features.slice(0, 4).map((feature) => (
-                  <li key={feature}>{feature}</li>
-                ))}
-              </ul>
-
-              <a className="cardLink" href={`#details-${product.slug}`}>View details</a>
+              <h3>{product}</h3>
+              <p>
+                {product === "ForgeOS" && "A community operating system for managing roles, applications, announcements, and teams."}
+                {product === "PulseDesk" && "A support and safety dashboard for tickets, appeals, reports, and internal workflows."}
+                {product === "LumaBuild" && "A website and brand builder for creators, students, startups, and small teams."}
+                {product === "OrbitChat" && "A lightweight communication platform for communities, clubs, teams, and creators."}
+                {product === "ArcadeCloud" && "A social gaming network for rooms, mini-games, profiles, and creator experiences."}
+                {product === "NovaLearn" && "A learning platform for coding, online safety, business, design, and digital skills."}
+              </p>
+              <a className="cardLink" href="#waitlist">Join early access</a>
             </article>
           ))}
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="sectionHeader">
-          <p className="eyebrow">Product Details</p>
-          <h2>What each product will become.</h2>
-        </div>
-
-        <div className="detailsGrid">
-          {products.map((product) => (
-            <article className="detailPanel" id={`details-${product.slug}`} key={product.slug}>
-              <small>{product.tag}</small>
-              <h3>{product.name}</h3>
-              <p>{product.details}</p>
-
-              <div className="pillList">
-                {product.features.map((feature) => (
-                  <span key={feature}>{feature}</span>
-                ))}
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="infrastructure" className="mission">
-        <div>
-          <p className="eyebrow">Vercel Deployment</p>
-          <h2>Hosted 24/7 without your laptop.</h2>
-          <p>
-            Nexi Labs is deployed on Vercel. Every time code is pushed to GitHub,
-            Vercel automatically builds and publishes the newest version of the website.
-          </p>
-        </div>
-
-        <div className="missionCard">
-          <h3>Production Stack</h3>
-          <ul>
-            <li>GitHub for source control</li>
-            <li>Vercel for hosting and deployments</li>
-            <li>Supabase for database and authentication</li>
-            <li>Resend for email notifications</li>
-            <li>React + Vite frontend</li>
-          </ul>
         </div>
       </section>
 
       <section id="auth" className="section">
         <div className="sectionHeader">
           <p className="eyebrow">Authentication</p>
-          <h2>Sign up or log in.</h2>
-          <p>
-            Authentication is powered by Supabase. Admin access is controlled
-            separately through the admin user table.
-          </p>
+          <h2>Sign in or create an account.</h2>
         </div>
 
         <form className="authBox">
-          <input
-            type="email"
-            placeholder="Email"
-            value={authEmail}
-            onChange={(e) => setAuthEmail(e.target.value)}
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            value={authPassword}
-            onChange={(e) => setAuthPassword(e.target.value)}
-          />
+          <input type="email" placeholder="Email" value={authEmail} onChange={(e) => setAuthEmail(e.target.value)} />
+          <input type="password" placeholder="Password" value={authPassword} onChange={(e) => setAuthPassword(e.target.value)} />
 
           <div className="authBtns">
             <button onClick={signIn}>Sign In</button>
@@ -314,18 +208,29 @@ export default function App() {
       <section id="admin" className="section">
         <div className="sectionHeader">
           <p className="eyebrow">Admin Dashboard</p>
-          <h2>View waitlist signups.</h2>
-          <p>
-            Sign in with your admin account, then load the waitlist data from Supabase.
-          </p>
+          <h2>Waitlist intelligence.</h2>
+          <p>View signups, product interest, latest leads, and early demand signals.</p>
         </div>
 
         <div className="adminPanel">
           <button onClick={loadWaitlist}>Load Waitlist</button>
           {adminStatus && <p>{adminStatus}</p>}
 
+          <div className="adminStats">
+            <div><strong>{waitlist.length}</strong><span>Total signups</span></div>
+            <div><strong>{productCounts[0]?.count ?? 0}</strong><span>ForgeOS interest</span></div>
+            <div><strong>{filteredWaitlist.length}</strong><span>Filtered results</span></div>
+          </div>
+
+          <div className="filterBar">
+            <button onClick={() => setFilter("All")}>All</button>
+            {products.map((product) => (
+              <button key={product} onClick={() => setFilter(product)}>{product}</button>
+            ))}
+          </div>
+
           <div className="adminTable">
-            {waitlist.map((entry) => (
+            {filteredWaitlist.map((entry) => (
               <div className="adminRow" key={entry.id}>
                 <strong>{entry.name}</strong>
                 <span>{entry.email}</span>
@@ -337,42 +242,17 @@ export default function App() {
         </div>
       </section>
 
-      <section id="mission" className="mission">
-        <div>
-          <p className="eyebrow">Mission</p>
-          <h2>Useful software should help people start.</h2>
-          <p>
-            Nexi Labs is designed around accessibility. The goal is to give new
-            creators, communities, students, and small teams practical software
-            they can use before they have funding or large audiences.
-          </p>
-        </div>
-
-        <div className="missionCard">
-          <h3>Launch Principles</h3>
-          <ul>
-            <li>Core tools stay free during early access</li>
-            <li>No pay-to-win mechanics</li>
-            <li>No exploitative pricing patterns</li>
-            <li>Privacy-first product design</li>
-            <li>Built for real people starting from zero</li>
-          </ul>
-        </div>
-      </section>
-
-      <section id="faq" className="section faqSection">
+      <section id="legal" className="section">
         <div className="sectionHeader">
-          <p className="eyebrow">FAQ</p>
-          <h2>Questions people may ask.</h2>
+          <p className="eyebrow">Legal</p>
+          <h2>Basic legal pages.</h2>
+          <p>These pages explain how Nexi Labs handles access, acceptable use, and basic privacy expectations.</p>
         </div>
 
-        <div className="faqGrid">
-          {faqs.map(([q, a]) => (
-            <details className="faqItem" key={q}>
-              <summary>{q}</summary>
-              <p>{a}</p>
-            </details>
-          ))}
+        <div className="legalCards">
+          <button onClick={() => setPage("privacy")}>Privacy Policy</button>
+          <button onClick={() => setPage("terms")}>Terms of Service</button>
+          <button onClick={() => setPage("aup")}>Acceptable Use Policy</button>
         </div>
       </section>
 
@@ -388,7 +268,7 @@ export default function App() {
           <select name="product" value={form.product} onChange={updateForm} required>
             <option value="" disabled>Product I care about most</option>
             {products.map((product) => (
-              <option key={product.name} value={product.name}>{product.name}</option>
+              <option key={product} value={product}>{product}</option>
             ))}
           </select>
 
@@ -405,11 +285,74 @@ export default function App() {
           <strong>CommunityShieldOfficial@gmail.com</strong>
         </div>
 
+        <div className="footerCols">
+          <div>
+            <h4>Legal</h4>
+            <button onClick={() => setPage("privacy")}>Privacy Policy</button>
+            <button onClick={() => setPage("terms")}>Terms</button>
+            <button onClick={() => setPage("aup")}>Acceptable Use</button>
+          </div>
+        </div>
+
         <div className="footerBottom">
           <span>© 2026 Nexi Labs. All rights reserved.</span>
           <span>Build better tools. Make them free first.</span>
         </div>
       </footer>
+    </main>
+  );
+}
+
+function LegalPage({ title, setPage }) {
+  return (
+    <main className="site">
+      <section className="legalPage">
+        <button className="backButton" onClick={() => setPage("home")}>← Back to website</button>
+        <p className="eyebrow">Nexi Labs Legal</p>
+        <h1>{title}</h1>
+        <p><strong>Last updated:</strong> May 2026</p>
+
+        <div className="legalText">
+          {title === "Privacy Policy" && (
+            <>
+              <h2>1. Information We Collect</h2>
+              <p>Nexi Labs may collect names, email addresses, product interests, authentication data, and basic technical information submitted through the website.</p>
+              <h2>2. How We Use Information</h2>
+              <p>We use information to manage the waitlist, contact interested users, improve products, and operate the website safely.</p>
+              <h2>3. Data Storage</h2>
+              <p>Waitlist and authentication data may be stored using Supabase. Website hosting is handled through Vercel.</p>
+              <h2>4. Contact</h2>
+              <p>For privacy questions, contact CommunityShieldOfficial@gmail.com.</p>
+            </>
+          )}
+
+          {title === "Terms of Service" && (
+            <>
+              <h2>1. Use of the Website</h2>
+              <p>By using this website, you agree to use Nexi Labs services responsibly and lawfully.</p>
+              <h2>2. Early Access</h2>
+              <p>Products may be experimental, incomplete, or changed at any time during early development.</p>
+              <h2>3. No Guarantee</h2>
+              <p>Nexi Labs is provided as-is during early development with no guarantee of uptime, availability, or final release dates.</p>
+              <h2>4. Contact</h2>
+              <p>For questions, contact CommunityShieldOfficial@gmail.com.</p>
+            </>
+          )}
+
+          {title === "Acceptable Use Policy" && (
+            <>
+              <h2>1. Allowed Use</h2>
+              <p>Nexi Labs tools should be used for lawful, ethical, constructive, and community-focused purposes.</p>
+              <h2>2. Prohibited Use</h2>
+              <p>Users may not use Nexi Labs for harassment, abuse, illegal activity, spam, doxxing, exploitation, or harmful automation.</p>
+              <h2>3. Enforcement</h2>
+              <p>Nexi Labs may restrict access to users or communities that misuse future services.</p>
+              <h2>4. Safety First</h2>
+              <p>The platform is designed around accessibility, privacy, and responsible use.</p>
+            </>
+          )}
+        </div>
+      </section>
     </main>
   );
 }
