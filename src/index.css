@@ -553,3 +553,115 @@ body {
     flex-direction: column;
   }
 }
+
+.detailsGrid {
+  display: grid;
+  gap: 22px;
+}
+
+.detailPanel {
+  padding: 32px;
+  border-radius: 28px;
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(255,255,255,0.09);
+}
+
+.detailPanel small {
+  color: #60a5fa;
+  font-weight: 900;
+}
+
+.detailPanel h3 {
+  font-size: 2rem;
+  margin: 14px 0;
+}
+
+.detailPanel p {
+  color: #aab4c3;
+  line-height: 1.8;
+  max-width: 900px;
+}
+
+.pillList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.pillList span {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(52, 211, 153, 0.12);
+  color: #34d399;
+  font-weight: 800;
+}
+
+.authBox,
+.adminPanel {
+  max-width: 900px;
+  padding: 30px;
+  border-radius: 28px;
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(255,255,255,0.09);
+}
+
+.authBox input {
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.3);
+  color: white;
+  outline: none;
+}
+
+.authBtns {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.authBtns button,
+.adminPanel button {
+  padding: 14px 18px;
+  border: none;
+  border-radius: 14px;
+  background: #34d399;
+  color: #02110b;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.adminPanel p {
+  color: #aab4c3;
+  margin: 16px 0;
+}
+
+.adminTable {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.adminRow {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr 1fr 1fr;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.07);
+}
+
+.adminRow span,
+.adminRow small {
+  color: #aab4c3;
+}
+
+@media (max-width: 850px) {
+  .adminRow {
+    grid-template-columns: 1fr;
+  }
+}
