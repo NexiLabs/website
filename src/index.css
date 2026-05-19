@@ -1,0 +1,489 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Inter, Arial, sans-serif;
+  background: #030712;
+  color: white;
+}
+
+.site {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(52, 211, 153, 0.15), transparent 34%),
+    radial-gradient(circle at top right, rgba(96, 165, 250, 0.14), transparent 34%),
+    linear-gradient(180deg, #030712 0%, #07111f 45%, #030712 100%);
+}
+
+.nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 22px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(3, 7, 18, 0.72);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 1.45rem;
+  font-weight: 900;
+  background: linear-gradient(90deg, #34d399, #60a5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.navLinks a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.navButton {
+  padding: 11px 18px;
+  border-radius: 999px;
+  background: white;
+  color: #030712 !important;
+  font-weight: 900 !important;
+}
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  padding: 170px 7% 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.orb {
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.45;
+  animation: float 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.orbOne {
+  background: #34d399;
+  left: 8%;
+  top: 22%;
+}
+
+.orbTwo {
+  background: #60a5fa;
+  right: 8%;
+  bottom: 14%;
+  animation-delay: 2s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-30px) scale(1.08);
+  }
+}
+
+.eyebrow {
+  color: #34d399;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.78rem;
+  margin-bottom: 18px;
+}
+
+.hero h1 {
+  max-width: 1100px;
+  font-size: clamp(3.4rem, 8vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: -0.07em;
+}
+
+.heroText {
+  max-width: 760px;
+  margin: 28px auto;
+  color: #aab4c3;
+  font-size: 1.22rem;
+  line-height: 1.8;
+}
+
+.heroBtns {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.primary,
+.secondary {
+  padding: 15px 24px;
+  border-radius: 16px;
+  text-decoration: none;
+  font-weight: 900;
+  transition: 0.25s ease;
+}
+
+.primary {
+  background: #34d399;
+  color: #02110b;
+}
+
+.secondary {
+  color: white;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.primary:hover,
+.secondary:hover,
+.navButton:hover,
+.card button:hover,
+.waitlist button:hover {
+  transform: translateY(-3px);
+}
+
+.stats {
+  width: 86%;
+  margin: -55px auto 80px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-radius: 30px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(255,255,255,0.09);
+  backdrop-filter: blur(16px);
+}
+
+.stats div {
+  padding: 34px;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+.stats div:last-child {
+  border-right: none;
+}
+
+.stats strong {
+  display: block;
+  font-size: 2.4rem;
+  color: #34d399;
+}
+
+.stats span {
+  color: #aab4c3;
+}
+
+.section {
+  padding: 95px 7%;
+}
+
+.sectionHeader {
+  max-width: 850px;
+  margin-bottom: 42px;
+}
+
+.sectionHeader h2,
+.mission h2,
+.waitlist h2 {
+  font-size: clamp(2.5rem, 5vw, 4.4rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  margin-bottom: 18px;
+}
+
+.sectionHeader p,
+.mission p,
+.waitlist p {
+  color: #aab4c3;
+  line-height: 1.8;
+  font-size: 1.05rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  min-height: 305px;
+  padding: 30px;
+  border-radius: 30px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.025));
+  border: 1px solid rgba(255,255,255,0.09);
+  transition: 0.25s ease;
+  animation: riseIn 0.7s ease both;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(52, 211, 153, 0.45);
+  box-shadow: 0 24px 90px rgba(52, 211, 153, 0.1);
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.cardTop span {
+  color: #60a5fa;
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+.cardTop small {
+  color: #dbeafe;
+  background: rgba(96, 165, 250, 0.14);
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.72rem;
+}
+
+.card h3 {
+  font-size: 1.8rem;
+  margin: 18px 0;
+}
+
+.card p {
+  color: #aab4c3;
+  line-height: 1.75;
+  margin-bottom: 24px;
+}
+
+.card button {
+  border: none;
+  border-radius: 999px;
+  background: rgba(52, 211, 153, 0.14);
+  color: #34d399;
+  padding: 12px 18px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.mission {
+  margin: 45px 7%;
+  padding: 60px;
+  border-radius: 36px;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 44px;
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(255,255,255,0.09);
+}
+
+.missionCard {
+  padding: 32px;
+  border-radius: 28px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.missionCard h3 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.missionCard ul {
+  padding-left: 20px;
+}
+
+.missionCard li {
+  margin-bottom: 12px;
+  color: #aab4c3;
+}
+
+.timeline {
+  display: grid;
+  gap: 18px;
+}
+
+.timeline div {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  align-items: center;
+  gap: 20px;
+  padding: 25px;
+  border-radius: 24px;
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.timeline b {
+  color: #34d399;
+  font-size: 1.4rem;
+}
+
+.timeline p {
+  color: #dbeafe;
+  font-size: 1.05rem;
+}
+
+.waitlist {
+  margin: 40px 7% 90px;
+  padding: 70px 40px;
+  text-align: center;
+  border-radius: 38px;
+  background:
+    radial-gradient(circle at center, rgba(52, 211, 153, 0.18), transparent 60%),
+    rgba(255,255,255,0.055);
+  border: 1px solid rgba(255,255,255,0.09);
+}
+
+.waitlist p {
+  margin-bottom: 28px;
+}
+
+.waitlist form {
+  max-width: 850px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.waitlist input,
+.waitlist select {
+  width: 100%;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.3);
+  color: white;
+  outline: none;
+}
+
+.waitlist input::placeholder {
+  color: #94a3b8;
+}
+
+.waitlist button {
+  grid-column: span 2;
+  padding: 16px;
+  border: none;
+  border-radius: 16px;
+  background: #34d399;
+  color: #02110b;
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.success {
+  margin: 18px auto 0;
+  max-width: 850px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  color: #34d399;
+  font-weight: 800;
+}
+
+footer {
+  padding: 80px 7%;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.28);
+}
+
+footer p {
+  color: #aab4c3;
+  margin: 14px 0;
+}
+
+footer strong {
+  color: #34d399;
+}
+
+@media (max-width: 850px) {
+  .nav {
+    position: static;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .navLinks {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .hero {
+    padding-top: 90px;
+  }
+
+  .stats,
+  .mission {
+    grid-template-columns: 1fr;
+  }
+
+  .stats div {
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .stats div:last-child {
+    border-bottom: none;
+  }
+
+  .mission {
+    padding: 34px;
+  }
+
+  .timeline div {
+    grid-template-columns: 1fr;
+  }
+
+  .waitlist form {
+    grid-template-columns: 1fr;
+  }
+
+  .waitlist button {
+    grid-column: span 1;
+  }
+}
